@@ -9,7 +9,7 @@ const baseCapability = {
     browserName: 'googlechrome',
     browserVersion: 'latest',
     'sauce:options': {
-        build: process.env.SAUCE_BUILD_NAME ? process.env.SAUCE_BUILD_NAME : `sample-wdio-ts-${date.toISOString()}`
+        build: process.env.SAUCE_BUILD_NAME ? process.env.SAUCE_BUILD_NAME : `ts-wdio-allure-junit-${date.toISOString()}`
     }
 }
 
@@ -49,6 +49,17 @@ const config: WebdriverIO.Config  = {
     framework: 'mocha',
     reporters: [
         'spec',
+        ['junit', {
+            outputDir: './junit-results',
+            outputFileFormat: function(options) { // optional
+                return `results-${options.cid}.${options.capabilities.browserName}.xml`
+            }
+        }],
+        ['allure', {
+            outputDir: './allure-results',
+            disableWebdriverStepsReporting: true,
+            disableWebdriverScreenshotsReporting: true,
+        }]
     ],
     
     //
